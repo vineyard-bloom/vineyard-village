@@ -11,6 +11,7 @@
   "author": "Christopher W. Johnson",
   "license": "MIT",
   "dependencies": {
+    "sequelize": "^3.30.4",
     "vineyard-ground": "0.2.x",
     "vineyard-lawn": "0.4.x",
     "vineyard-users": "0.3.x"

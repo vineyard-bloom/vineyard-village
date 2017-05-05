@@ -1,4 +1,10 @@
-import { Request_Processor } from 'vineyard-lawn';
-import { UserService } from "../model/users";
-export declare function createAnonymous(): Request_Processor;
-export declare function createAuthorized(userService: UserService): Request_Processor;
+import { Request, Request_Processor, Version } from 'vineyard-lawn';
+import { UserService } from "vineyard-users";
+export declare class Preprocessor {
+    versions: Version[];
+    constructor(versions: Version[]);
+    checkVersion(request: Request): void;
+    common(request: any): Promise<Request>;
+    createAnonymous(): Request_Processor;
+    createAuthorized(userService: UserService): Request_Processor;
+}

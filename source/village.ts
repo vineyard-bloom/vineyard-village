@@ -1,5 +1,6 @@
 import {Modeler} from "vineyard-ground"
 import * as sequelize from "sequelize";
+import {getRootPath} from "./utility";
 
 // const secrets = require('../../config/secrets.json')
 // const general = require('../../config/general.json')
@@ -7,6 +8,7 @@ import * as sequelize from "sequelize";
 export interface ModelInterface {
   ground
   db
+  User
 }
 
 export class Village<Model extends ModelInterface> {
@@ -15,11 +17,17 @@ export class Village<Model extends ModelInterface> {
   private db
   private secrets
   private general
+  private rootPath
 
-  constructor(secrets, general, schema) {
-    this.secrets = secrets
-    this.general = general
-    this.model = this.createModel(schema)
+  constructor() {
+    this.rootPath = getRootPath().replace('\\', '/')
+    this.secrets = this.load('config/secrets.json')
+    this.general = this.load('config/general.json')
+    this.model = this.createModel(this.load('src/model/schema.json'))
+  }
+
+  load(filename): any {
+    return require(this.rootPath + '/' + filename)
   }
 
   getModel(): Model {

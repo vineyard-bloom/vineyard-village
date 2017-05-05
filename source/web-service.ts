@@ -1,8 +1,8 @@
 import {ModelInterface, Village} from "./village";
 import * as lawn from 'vineyard-lawn'
 import {UserManager, UserService} from "vineyard-users"
-import * as preprocessor from './preprocessor'
-import {Method} from "vineyard-lawn";
+import {Method, Version} from "vineyard-lawn";
+import {Preprocessor} from "./preprocessor";
 
 export class WebService<Model extends ModelInterface> {
   village: Village<Model>
@@ -10,44 +10,19 @@ export class WebService<Model extends ModelInterface> {
   private userManager: UserManager
   private userService: UserService
   private userModel
+  private versions
+  private preprocessor: Preprocessor
+  private anonymous
+  private authorized
 
-  constructor(village: Village<Model>, userModel) {
+  constructor(village: Village<Model>, versions: Version[]) {
     this.village = village
-    this.userModel = userModel
+    this.userModel = village.getModel().User
+    this.versions = versions
+    this.preprocessor = new Preprocessor(this.versions)
     this.server = new lawn.Server()
     this.server.enable_cors()
-  }
 
-  initializePublicEndpoints() {
-
-    const anonymous = preprocessor.createAnonymous()
-
-    this.server.add_endpoints([
-
-      {
-        method: Method.post,
-        path: "user/login",
-        action: this.userService.create_login_handler()
-      },
-
-    ], anonymous)
-
-  }
-
-  initialize_authorized_endpoints() {
-
-    this.server.add_endpoints([
-
-      {
-        method: Method.post,
-        path: "user/logout",
-        action: this.userService.create_logout_handler()
-      },
-
-    ], preprocessor.createAuthorized(this))
-  }
-
-  start(addressSource) {
     this.userManager = new UserManager(this.village.getModel().db, {
       user_model: this.userModel
     })
@@ -56,6 +31,41 @@ export class WebService<Model extends ModelInterface> {
       secret: this.village.getSecrets().cookies.secret,
     })
 
+    this.authorized = this.preprocessor.createAuthorized(this.userService)
+    this.anonymous = this.preprocessor.createAnonymous()
+  }
+
+  private initialize_endpoints() {
+    this.createPublicEndpoints([
+
+      {
+        method: Method.post,
+        path: "user/login",
+        action: this.userService.create_login_handler()
+      },
+
+    ])
+
+    this.createAuthorizedEndpoints([
+
+      {
+        method: Method.post,
+        path: "user/logout",
+        action: this.userService.create_logout_handler()
+      },
+
+    ])
+  }
+
+  createPublicEndpoints(endpoints) {
+    this.server.add_endpoints(endpoints, this.anonymous)
+  }
+
+  createAuthorizedEndpoints(endpoints) {
+    this.server.add_endpoints(endpoints, this.authorized)
+  }
+
+  start(addressSource) {
     return this.server.start(this.village.getGeneral().api)
   }
 

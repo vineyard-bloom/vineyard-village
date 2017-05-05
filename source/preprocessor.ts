@@ -1,28 +1,39 @@
-import {Request, Bad_Request, Request_Processor} from 'vineyard-lawn'
-import {UserManager, UserService} from "../model/users";
+import {Request, Bad_Request, Request_Processor, Version} from 'vineyard-lawn'
+import {UserService} from "vineyard-users";
 
-function checkVersion(request: Request) {
-  const version = request.data['version']
-  if (!version)
-    throw new Bad_Request("Missing version property.")
+export class Preprocessor {
+  versions: Version []
 
-  if (!version.match(/^1\.0/))
-    throw new Bad_Request("Unsupported version number")
-}
+  constructor(versions: Version []) {
+    if (!versions.length)
+      throw new Error('Preprocessor.versions array cannot be empty.')
 
-function common(request): Promise<Request> {
-  checkVersion(request)
-  return Promise.resolve(request)
-}
+    this.versions = versions
+  }
 
-export function createAnonymous(): Request_Processor {
-  return request => common(request)
-}
+  checkVersion(request: Request) {
+    const version = request.data['version']
+    if (!version)
+      throw new Bad_Request("Missing version property.")
 
-export function createAuthorized(userService: UserService): Request_Processor {
-  return request => common(request)
-    .then(request => {
-      userService.requireLoggedIn(request)
-      return request
-    })
+    if (!this.versions.some(v => v.equals(version)))
+      throw new Bad_Request("Unsupported version number")
+  }
+
+  common(request): Promise<Request> {
+    this.checkVersion(request)
+    return Promise.resolve(request)
+  }
+
+  createAnonymous(): Request_Processor {
+    return request => this.common(request)
+  }
+
+  createAuthorized(userService: UserService): Request_Processor {
+    return request => this.common(request)
+      .then(request => {
+        userService.require_logged_in(request)
+        return request
+      })
+  }
 }
