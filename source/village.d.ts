@@ -4,17 +4,23 @@ export interface ModelInterface {
     db: any;
     User: any;
 }
-export declare class Village<Model extends ModelInterface> {
+export interface PrivateConfig {
+}
+export interface PublicConfig {
+}
+export interface VillageSettings {
+    privateConfig: PrivateConfig;
+    publicConfig: PublicConfig;
+    schema: any;
+}
+export declare class GenericVillage<Model extends ModelInterface> {
     private model;
-    private db;
-    private secrets;
-    private general;
-    private rootPath;
-    constructor();
-    load(filename: any): any;
+    private privateConfig;
+    private publicConfig;
+    constructor(settings: VillageSettings);
+    private createModel(schema);
     getModel(): Model;
-    getSecrets(): any;
-    getGeneral(): any;
+    getPrivateConfig(): any;
+    getPublicConfig(): any;
     getGround(): Modeler;
-    createModel(schema: any): any;
 }

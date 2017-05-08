@@ -4,8 +4,8 @@ var lawn = require("vineyard-lawn");
 var vineyard_users_1 = require("vineyard-users");
 var vineyard_lawn_1 = require("vineyard-lawn");
 var preprocessor_1 = require("./preprocessor");
-var WebService = (function () {
-    function WebService(village, versions) {
+var GenericWebService = (function () {
+    function GenericWebService(village, versions) {
         this.village = village;
         this.userModel = village.getModel().User;
         this.versions = versions;
@@ -16,12 +16,13 @@ var WebService = (function () {
             user_model: this.userModel
         });
         this.userService = new vineyard_users_1.UserService(this.server.get_app(), this.userManager, {
-            secret: this.village.getSecrets().cookies.secret,
+            secret: this.village.getPrivateConfig().cookies.secret,
         });
         this.authorized = this.preprocessor.createAuthorized(this.userService);
         this.anonymous = this.preprocessor.createAnonymous();
+        this.initialize_endpoints();
     }
-    WebService.prototype.initialize_endpoints = function () {
+    GenericWebService.prototype.initialize_endpoints = function () {
         this.createPublicEndpoints([
             {
                 method: vineyard_lawn_1.Method.post,
@@ -37,16 +38,19 @@ var WebService = (function () {
             },
         ]);
     };
-    WebService.prototype.createPublicEndpoints = function (endpoints) {
+    GenericWebService.prototype.createPublicEndpoints = function (endpoints) {
         this.server.add_endpoints(endpoints, this.anonymous);
     };
-    WebService.prototype.createAuthorizedEndpoints = function (endpoints) {
+    GenericWebService.prototype.createAuthorizedEndpoints = function (endpoints) {
         this.server.add_endpoints(endpoints, this.authorized);
     };
-    WebService.prototype.start = function (addressSource) {
-        return this.server.start(this.village.getGeneral().api);
+    GenericWebService.prototype.start = function () {
+        return this.server.start(this.village.getPublicConfig().api);
     };
-    return WebService;
+    GenericWebService.prototype.getUserManager = function () {
+        return this.userManager;
+    };
+    return GenericWebService;
 }());
-exports.WebService = WebService;
+exports.GenericWebService = GenericWebService;
 //# sourceMappingURL=web-service.js.map

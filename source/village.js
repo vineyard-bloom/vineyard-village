@@ -2,31 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var vineyard_ground_1 = require("vineyard-ground");
 var sequelize = require("sequelize");
-var utility_1 = require("./utility");
-var Village = (function () {
-    function Village() {
-        this.rootPath = utility_1.getRootPath().replace('\\', '/');
-        this.secrets = this.load('config/secrets.json');
-        this.general = this.load('config/general.json');
-        this.model = this.createModel(this.load('src/model/schema.json'));
+var GenericVillage = (function () {
+    function GenericVillage(settings) {
+        this.privateConfig = settings.privateConfig;
+        this.publicConfig = settings.publicConfig;
+        this.model = this.createModel(settings.schema);
     }
-    Village.prototype.load = function (filename) {
-        return require(this.rootPath + '/' + filename);
-    };
-    Village.prototype.getModel = function () {
-        return this.model;
-    };
-    Village.prototype.getSecrets = function () {
-        return this.secrets;
-    };
-    Village.prototype.getGeneral = function () {
-        return this.general;
-    };
-    Village.prototype.getGround = function () {
-        return this.model.ground;
-    };
-    Village.prototype.createModel = function (schema) {
-        var db = new sequelize(this.secrets.database);
+    GenericVillage.prototype.createModel = function (schema) {
+        var db = new sequelize(this.privateConfig.database);
         var modeler = new vineyard_ground_1.Modeler(db, schema);
         var model = Object.assign({
             ground: modeler,
@@ -34,7 +17,19 @@ var Village = (function () {
         }, modeler.collections);
         return model;
     };
-    return Village;
+    GenericVillage.prototype.getModel = function () {
+        return this.model;
+    };
+    GenericVillage.prototype.getPrivateConfig = function () {
+        return this.privateConfig;
+    };
+    GenericVillage.prototype.getPublicConfig = function () {
+        return this.publicConfig;
+    };
+    GenericVillage.prototype.getGround = function () {
+        return this.model.ground;
+    };
+    return GenericVillage;
 }());
-exports.Village = Village;
+exports.GenericVillage = GenericVillage;
 //# sourceMappingURL=village.js.map

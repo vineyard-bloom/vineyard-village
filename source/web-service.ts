@@ -1,11 +1,11 @@
-import {ModelInterface, Village} from "./village";
+import {ModelInterface, GenericVillage} from "./village";
 import * as lawn from 'vineyard-lawn'
 import {UserManager, UserService} from "vineyard-users"
 import {Method, Version} from "vineyard-lawn";
 import {Preprocessor} from "./preprocessor";
 
-export class WebService<Model extends ModelInterface> {
-  village: Village<Model>
+export class GenericWebService<Model extends ModelInterface> {
+  village: GenericVillage<Model>
   private server: lawn.Server
   private userManager: UserManager
   private userService: UserService
@@ -15,7 +15,7 @@ export class WebService<Model extends ModelInterface> {
   private anonymous
   private authorized
 
-  constructor(village: Village<Model>, versions: Version[]) {
+  constructor(village: GenericVillage<Model>, versions: Version[]) {
     this.village = village
     this.userModel = village.getModel().User
     this.versions = versions
@@ -28,11 +28,13 @@ export class WebService<Model extends ModelInterface> {
     })
 
     this.userService = new UserService(this.server.get_app(), this.userManager, {
-      secret: this.village.getSecrets().cookies.secret,
+      secret: this.village.getPrivateConfig().cookies.secret,
     })
 
     this.authorized = this.preprocessor.createAuthorized(this.userService)
     this.anonymous = this.preprocessor.createAnonymous()
+
+    this.initialize_endpoints()
   }
 
   private initialize_endpoints() {
@@ -65,8 +67,11 @@ export class WebService<Model extends ModelInterface> {
     this.server.add_endpoints(endpoints, this.authorized)
   }
 
-  start(addressSource) {
-    return this.server.start(this.village.getGeneral().api)
+  start() {
+    return this.server.start(this.village.getPublicConfig().api)
   }
 
+  getUserManager() {
+    return this.userManager
+  }
 }

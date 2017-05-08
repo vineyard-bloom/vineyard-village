@@ -1,9 +1,5 @@
 import {Modeler} from "vineyard-ground"
 import * as sequelize from "sequelize";
-import {getRootPath} from "./utility";
-
-// const secrets = require('../../config/secrets.json')
-// const general = require('../../config/general.json')
 
 export interface ModelInterface {
   ground
@@ -11,43 +7,33 @@ export interface ModelInterface {
   User
 }
 
-export class Village<Model extends ModelInterface> {
+export interface PrivateConfig {
 
+}
+
+export interface PublicConfig {
+
+}
+
+export interface VillageSettings {
+  privateConfig: PrivateConfig
+  publicConfig: PublicConfig
+  schema: any
+}
+
+export class GenericVillage<Model extends ModelInterface> {
   private model: Model
-  private db
-  private secrets
-  private general
-  private rootPath
+  private privateConfig
+  private publicConfig
 
-  constructor() {
-    this.rootPath = getRootPath().replace('\\', '/')
-    this.secrets = this.load('config/secrets.json')
-    this.general = this.load('config/general.json')
-    this.model = this.createModel(this.load('src/model/schema.json'))
+  constructor(settings: VillageSettings) {
+    this.privateConfig = settings.privateConfig
+    this.publicConfig = settings.publicConfig
+    this.model = this.createModel(settings.schema)
   }
 
-  load(filename): any {
-    return require(this.rootPath + '/' + filename)
-  }
-
-  getModel(): Model {
-    return this.model
-  }
-
-  getSecrets() {
-    return this.secrets
-  }
-
-  getGeneral() {
-    return this.general
-  }
-
-  getGround(): Modeler {
-    return this.model.ground
-  }
-
-  createModel(schema) {
-    const db = new sequelize(this.secrets.database)
+  private  createModel(schema): Model {
+    const db = new sequelize(this.privateConfig.database)
     const modeler = new Modeler(db, schema)
     const model = Object.assign({
       ground: modeler,
@@ -55,4 +41,21 @@ export class Village<Model extends ModelInterface> {
     }, modeler.collections)
     return model
   }
+
+  getModel(): Model {
+    return this.model
+  }
+
+  getPrivateConfig() {
+    return this.privateConfig
+  }
+
+  getPublicConfig() {
+    return this.publicConfig
+  }
+
+  getGround(): Modeler {
+    return this.model.ground
+  }
+
 }
