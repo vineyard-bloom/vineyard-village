@@ -1,5 +1,5 @@
 import { ModelInterface, GenericVillage } from "./village";
-import { UserManager } from "vineyard-users";
+import { UserManager, UserService } from "vineyard-users";
 import { Version } from "vineyard-lawn";
 export declare class GenericWebService<Model extends ModelInterface> {
     village: GenericVillage<Model>;
@@ -15,6 +15,10 @@ export declare class GenericWebService<Model extends ModelInterface> {
     private initialize_endpoints();
     createPublicEndpoints(endpoints: any): void;
     createAuthorizedEndpoints(endpoints: any): void;
+    createEndpoints(endpoints: any, preprocessor: any): void;
+    getAuthorizedPreprocessor(): any;
+    getAnonymousPreprocessor(): any;
     start(): Promise<void>;
     getUserManager(): UserManager;
+    getUserService(): UserService;
 }

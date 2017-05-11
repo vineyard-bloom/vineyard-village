@@ -44,11 +44,23 @@ var GenericWebService = (function () {
     GenericWebService.prototype.createAuthorizedEndpoints = function (endpoints) {
         this.server.add_endpoints(endpoints, this.authorized);
     };
+    GenericWebService.prototype.createEndpoints = function (endpoints, preprocessor) {
+        this.server.add_endpoints(endpoints, preprocessor);
+    };
+    GenericWebService.prototype.getAuthorizedPreprocessor = function () {
+        return this.authorized;
+    };
+    GenericWebService.prototype.getAnonymousPreprocessor = function () {
+        return this.anonymous;
+    };
     GenericWebService.prototype.start = function () {
         return this.server.start(this.village.getPublicConfig().api);
     };
     GenericWebService.prototype.getUserManager = function () {
         return this.userManager;
+    };
+    GenericWebService.prototype.getUserService = function () {
+        return this.userService;
     };
     return GenericWebService;
 }());

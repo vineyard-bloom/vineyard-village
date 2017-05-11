@@ -67,11 +67,27 @@ export class GenericWebService<Model extends ModelInterface> {
     this.server.add_endpoints(endpoints, this.authorized)
   }
 
+  createEndpoints(endpoints, preprocessor) {
+    this.server.add_endpoints(endpoints, preprocessor)
+  }
+
+  getAuthorizedPreprocessor() {
+    return this.authorized
+  }
+
+  getAnonymousPreprocessor() {
+    return this.anonymous
+  }
+
   start() {
     return this.server.start(this.village.getPublicConfig().api)
   }
 
   getUserManager() {
     return this.userManager
+  }
+
+  getUserService(){
+    return this.userService
   }
 }
