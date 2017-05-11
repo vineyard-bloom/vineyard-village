@@ -32,7 +32,7 @@ export class GenericVillage<Model extends ModelInterface> {
     this.model = this.createModel(settings.schema)
   }
 
-  private  createModel(schema): Model {
+  private createModel(schema): Model {
     const db = new sequelize(this.privateConfig.database)
     const modeler = new Modeler(db, schema)
     const model = Object.assign({
