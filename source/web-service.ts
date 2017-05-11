@@ -59,6 +59,10 @@ export class GenericWebService<Model extends ModelInterface> {
     ])
   }
 
+  compileApiSchema(schema) {
+    return this.server.compileApiSchema(schema)
+  }
+
   createPublicEndpoints(endpoints) {
     this.server.add_endpoints(endpoints, this.anonymous)
   }
@@ -87,7 +91,11 @@ export class GenericWebService<Model extends ModelInterface> {
     return this.userManager
   }
 
-  getUserService(){
+  getUserService() {
     return this.userService
+  }
+
+  getLawnService(): lawn.Server {
+    return this.server
   }
 }

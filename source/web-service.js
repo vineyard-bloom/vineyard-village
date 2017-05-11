@@ -38,6 +38,9 @@ var GenericWebService = (function () {
             },
         ]);
     };
+    GenericWebService.prototype.compileApiSchema = function (schema) {
+        return this.server.compileApiSchema(schema);
+    };
     GenericWebService.prototype.createPublicEndpoints = function (endpoints) {
         this.server.add_endpoints(endpoints, this.anonymous);
     };
@@ -61,6 +64,9 @@ var GenericWebService = (function () {
     };
     GenericWebService.prototype.getUserService = function () {
         return this.userService;
+    };
+    GenericWebService.prototype.getLawnService = function () {
+        return this.server;
     };
     return GenericWebService;
 }());
