@@ -4,7 +4,11 @@ export interface ModelInterface {
     db: any;
     User: any;
 }
+export interface DatabaseConfig {
+    devMode?: boolean;
+}
 export interface PrivateConfig {
+    database: DatabaseConfig;
 }
 export interface PublicConfig {
 }
@@ -20,7 +24,7 @@ export declare class GenericVillage<Model extends ModelInterface> {
     constructor(settings: VillageSettings);
     private createModel(schema);
     getModel(): Model;
-    getPrivateConfig(): any;
-    getPublicConfig(): any;
+    getPrivateConfig(): PrivateConfig;
+    getPublicConfig(): PublicConfig;
     getGround(): Modeler;
 }

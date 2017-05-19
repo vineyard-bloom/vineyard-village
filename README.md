@@ -1,6 +1,6 @@
 # Vineyard Village
 
-Vineyard Village is a thin hub project that pulls together the Vineyard ecosystem to form a particular, unified web server.  It integrates three Vineyard libraries:
+Vineyard Village is a thin hub library that pulls together the Vineyard ecosystem to form a particular, unified web server.  It integrates three Vineyard libraries:
 
 1. [Vineyard Ground](https://github.com/silentorb/vineyard-ground) - SQL ORM
 2. [Vineyard Lawn](https://github.com/silentorb/vineyard-lawn) - JSON web services

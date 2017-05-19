@@ -1,5 +1,5 @@
 import {Modeler} from "vineyard-ground"
-import * as sequelize from "sequelize";
+const sequelize = require("sequelize")
 
 export interface ModelInterface {
   ground
@@ -7,8 +7,12 @@ export interface ModelInterface {
   User
 }
 
-export interface PrivateConfig {
+export interface DatabaseConfig {
+  devMode?: boolean
+}
 
+export interface PrivateConfig {
+  database: DatabaseConfig
 }
 
 export interface PublicConfig {
@@ -23,8 +27,8 @@ export interface VillageSettings {
 
 export class GenericVillage<Model extends ModelInterface> {
   private model: Model
-  private privateConfig
-  private publicConfig
+  private privateConfig: PrivateConfig
+  private publicConfig: PublicConfig
 
   constructor(settings: VillageSettings) {
     this.privateConfig = settings.privateConfig
@@ -34,7 +38,7 @@ export class GenericVillage<Model extends ModelInterface> {
 
   private createModel(schema): Model {
     const db = new sequelize(this.privateConfig.database)
-    const modeler = new Modeler(db, schema)
+    const modeler = new Modeler(db, schema, this.privateConfig.database.devMode)
     const model = Object.assign({
       ground: modeler,
       db: db

@@ -10,7 +10,7 @@ var GenericVillage = (function () {
     }
     GenericVillage.prototype.createModel = function (schema) {
         var db = new sequelize(this.privateConfig.database);
-        var modeler = new vineyard_ground_1.Modeler(db, schema);
+        var modeler = new vineyard_ground_1.Modeler(db, schema, this.privateConfig.database.devMode);
         var model = Object.assign({
             ground: modeler,
             db: db
