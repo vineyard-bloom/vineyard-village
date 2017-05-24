@@ -1,4 +1,4 @@
-import {Modeler} from "vineyard-ground"
+import {Modeler, DevModeler} from "vineyard-ground"
 const sequelize = require("sequelize")
 
 export interface ModelInterface {
@@ -38,7 +38,10 @@ export class GenericVillage<Model extends ModelInterface> {
 
   private createModel(schema): Model {
     const db = new sequelize(this.privateConfig.database)
-    const modeler = new Modeler(db, schema, this.privateConfig.database.devMode)
+    const modeler = !this.privateConfig.database.devMode
+      ? new Modeler(db, schema)
+      : new DevModeler(db, schema)
+
     const model = Object.assign({
       ground: modeler,
       db: db
