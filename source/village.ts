@@ -11,7 +11,7 @@ export interface DatabaseConfig {
   devMode?: boolean
 }
 
-export interface PrivateConfig {
+export interface CommonPrivateConfig {
   database: DatabaseConfig
 }
 
@@ -19,18 +19,18 @@ export interface PublicConfig {
 
 }
 
-export interface VillageSettings {
+export interface VillageSettings<PrivateConfig extends CommonPrivateConfig> {
   privateConfig: PrivateConfig
   publicConfig: PublicConfig
   schema: any
 }
 
-export class GenericVillage<Model extends ModelInterface> {
+export class GenericVillage<Model extends ModelInterface, PrivateConfig extends CommonPrivateConfig> {
   private model: Model
   private privateConfig: PrivateConfig
   private publicConfig: PublicConfig
 
-  constructor(settings: VillageSettings) {
+  constructor(settings: VillageSettings<PrivateConfig>) {
     this.privateConfig = settings.privateConfig
     this.publicConfig = settings.publicConfig
     this.model = this.createModel(settings.schema)
