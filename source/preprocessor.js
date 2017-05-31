@@ -8,10 +8,14 @@ var Preprocessor = (function () {
         this.versions = versions;
     }
     Preprocessor.prototype.checkVersion = function (request) {
-        var versionString = request.data['version'];
-        if (!versionString)
+        // const versionString = request.data['version']
+        // if (!versionString)
+        //   throw new Bad_Request("Missing version property.")
+        //
+        // const version = new Version(versionString)
+        var version = request.version;
+        if (!version)
             throw new vineyard_lawn_1.Bad_Request("Missing version property.");
-        var version = new vineyard_lawn_1.Version(versionString);
         if (!this.versions.some(function (v) { return v.equals(version); }))
             throw new vineyard_lawn_1.Bad_Request("Unsupported version number");
     };

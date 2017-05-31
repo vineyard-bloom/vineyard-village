@@ -12,11 +12,15 @@ export class Preprocessor {
   }
 
   checkVersion(request: Request) {
-    const versionString = request.data['version']
-    if (!versionString)
-      throw new Bad_Request("Missing version property.")
+    // const versionString = request.data['version']
+    // if (!versionString)
+    //   throw new Bad_Request("Missing version property.")
+    //
+    // const version = new Version(versionString)
 
-    const version = new Version(versionString)
+    const version = request.version
+    if (!version)
+      throw new Bad_Request("Missing version property.")
 
     if (!this.versions.some(v => v.equals(version)))
       throw new Bad_Request("Unsupported version number")

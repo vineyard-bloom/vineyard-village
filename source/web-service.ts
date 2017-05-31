@@ -33,8 +33,6 @@ export class GenericWebService<Model extends ModelInterface> {
 
     this.authorized = this.preprocessor.createAuthorized(this.userService)
     this.anonymous = this.preprocessor.createAnonymous()
-
-    this.initialize_endpoints()
   }
 
   private initialize_endpoints() {

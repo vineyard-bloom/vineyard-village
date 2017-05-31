@@ -20,7 +20,6 @@ var GenericWebService = (function () {
         });
         this.authorized = this.preprocessor.createAuthorized(this.userService);
         this.anonymous = this.preprocessor.createAnonymous();
-        this.initialize_endpoints();
     }
     GenericWebService.prototype.initialize_endpoints = function () {
         this.createPublicEndpoints([
