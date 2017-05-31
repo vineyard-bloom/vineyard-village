@@ -7,8 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": "git@github.com:silentorb/vineyard-village.git",
-  "author": "Christopher W. Johnson",
+  "repository": "git@github.com:vineyard-bloom/vineyard-village.git",
+  "author": "",
   "license": "MIT",
   "dependencies": {
     "sequelize": "^3.30.4",
