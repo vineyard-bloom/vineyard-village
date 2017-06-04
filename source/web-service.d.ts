@@ -1,9 +1,9 @@
-import { ModelInterface, GenericVillage } from "./village";
+import { ModelInterface, GenericVillage, CommonPrivateConfig } from "./village";
 import * as lawn from 'vineyard-lawn';
 import { UserManager, UserService } from "vineyard-users";
 import { Version } from "vineyard-lawn";
-export declare class GenericWebService<Model extends ModelInterface> {
-    village: GenericVillage<Model>;
+export declare class GenericWebService<Model extends ModelInterface, PrivateConfig extends CommonPrivateConfig> {
+    village: GenericVillage<Model, CommonPrivateConfig>;
     private server;
     private userManager;
     private userService;
@@ -12,7 +12,8 @@ export declare class GenericWebService<Model extends ModelInterface> {
     private preprocessor;
     private anonymous;
     private authorized;
-    constructor(village: GenericVillage<Model>, versions: Version[]);
+    private requestLogger;
+    constructor(village: GenericVillage<Model, CommonPrivateConfig>, versions: Version[]);
     private initialize_endpoints();
     compileApiSchema(schema: any): {};
     createPublicEndpoints(endpoints: any): void;

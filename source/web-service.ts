@@ -1,11 +1,12 @@
-import {ModelInterface, GenericVillage} from "./village";
+import {ModelInterface, GenericVillage, CommonPrivateConfig} from "./village";
 import * as lawn from 'vineyard-lawn'
 import {UserManager, UserService} from "vineyard-users"
 import {Method, Version} from "vineyard-lawn";
 import {Preprocessor} from "./preprocessor";
+import {CommonRequestLogger} from "vineyard-lawn-logging"
 
-export class GenericWebService<Model extends ModelInterface> {
-  village: GenericVillage<Model>
+export class GenericWebService<Model extends ModelInterface, PrivateConfig extends CommonPrivateConfig> {
+  village: GenericVillage<Model, CommonPrivateConfig>
   private server: lawn.Server
   private userManager: UserManager
   private userService: UserService
@@ -14,21 +15,29 @@ export class GenericWebService<Model extends ModelInterface> {
   private preprocessor: Preprocessor
   private anonymous
   private authorized
+  private requestLogger: CommonRequestLogger
 
-  constructor(village: GenericVillage<Model>, versions: Version[]) {
+  constructor(village: GenericVillage<Model, CommonPrivateConfig>, versions: Version[]) {
     this.village = village
     this.userModel = village.getModel().User
     this.versions = versions
     this.preprocessor = new Preprocessor(this.versions)
-    this.server = new lawn.Server()
+    this.requestLogger = new CommonRequestLogger(village.getModel().Request, this.village.getErrorLogger())
+    this.server = new lawn.Server(null, this.requestLogger)
     this.server.enable_cors()
 
     this.userManager = new UserManager(this.village.getModel().db, {
       user_model: this.userModel
     })
 
+    // Backwards compatibility.  privateConfig.cookies is deprecated
+    const privateConfig = this.village.getPrivateConfig()
+    const cookies = privateConfig.api
+      ? privateConfig.api.cookies
+      : privateConfig.cookies
+
     this.userService = new UserService(this.server.get_app(), this.userManager, {
-      secret: this.village.getPrivateConfig().cookies.secret,
+      secret: cookies.secret,
     })
 
     this.authorized = this.preprocessor.createAuthorized(this.userService)
