@@ -42,6 +42,8 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
 
     this.authorized = this.preprocessor.createAuthorized(this.userService)
     this.anonymous = this.preprocessor.createAnonymous()
+
+    this.userService.loadValidationHelpers(this.server.getApiSchema())
   }
 
   private initialize_endpoints() {
@@ -68,6 +70,10 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
 
   compileApiSchema(schema) {
     return this.server.compileApiSchema(schema)
+  }
+
+  addApiSchemaHelper(schema) {
+    this.server.addApiSchemaHelper(schema)
   }
 
   createPublicEndpoints(endpoints) {

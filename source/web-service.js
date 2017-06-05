@@ -27,6 +27,7 @@ var GenericWebService = (function () {
         });
         this.authorized = this.preprocessor.createAuthorized(this.userService);
         this.anonymous = this.preprocessor.createAnonymous();
+        this.userService.loadValidationHelpers(this.server.getApiSchema());
     }
     GenericWebService.prototype.initialize_endpoints = function () {
         this.createPublicEndpoints([
@@ -46,6 +47,9 @@ var GenericWebService = (function () {
     };
     GenericWebService.prototype.compileApiSchema = function (schema) {
         return this.server.compileApiSchema(schema);
+    };
+    GenericWebService.prototype.addApiSchemaHelper = function (schema) {
+        this.server.addApiSchemaHelper(schema);
     };
     GenericWebService.prototype.createPublicEndpoints = function (endpoints) {
         this.server.add_endpoints(endpoints, this.anonymous);

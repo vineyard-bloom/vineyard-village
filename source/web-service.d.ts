@@ -16,6 +16,7 @@ export declare class GenericWebService<Model extends ModelInterface, PrivateConf
     constructor(village: GenericVillage<Model, CommonPrivateConfig>, versions: Version[]);
     private initialize_endpoints();
     compileApiSchema(schema: any): {};
+    addApiSchemaHelper(schema: any): void;
     createPublicEndpoints(endpoints: any): void;
     createAuthorizedEndpoints(endpoints: any): void;
     createEndpoints(endpoints: any, preprocessor: any): void;
