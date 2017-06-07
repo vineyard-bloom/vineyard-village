@@ -6,7 +6,7 @@ import {Preprocessor} from "./preprocessor";
 import {CommonRequestLogger} from "vineyard-lawn-logging"
 
 export class GenericWebService<Model extends ModelInterface, PrivateConfig extends CommonPrivateConfig> {
-  village: GenericVillage<Model, CommonPrivateConfig>
+  village: GenericVillage<Model, PrivateConfig>
   private server: lawn.Server
   private userManager: UserManager
   private userService: UserService
@@ -17,7 +17,7 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
   private authorized
   private requestLogger: CommonRequestLogger
 
-  constructor(village: GenericVillage<Model, CommonPrivateConfig>, versions: Version[]) {
+  constructor(village: GenericVillage<Model, PrivateConfig>, versions: Version[]) {
     this.village = village
     this.userModel = village.getModel().User
     this.versions = versions

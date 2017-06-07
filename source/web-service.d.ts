@@ -3,7 +3,7 @@ import * as lawn from 'vineyard-lawn';
 import { UserManager, UserService } from "vineyard-users";
 import { Version } from "vineyard-lawn";
 export declare class GenericWebService<Model extends ModelInterface, PrivateConfig extends CommonPrivateConfig> {
-    village: GenericVillage<Model, CommonPrivateConfig>;
+    village: GenericVillage<Model, PrivateConfig>;
     private server;
     private userManager;
     private userService;
@@ -13,7 +13,7 @@ export declare class GenericWebService<Model extends ModelInterface, PrivateConf
     private anonymous;
     private authorized;
     private requestLogger;
-    constructor(village: GenericVillage<Model, CommonPrivateConfig>, versions: Version[]);
+    constructor(village: GenericVillage<Model, PrivateConfig>, versions: Version[]);
     private initialize_endpoints();
     compileApiSchema(schema: any): {};
     addApiSchemaHelper(schema: any): void;
