@@ -69,6 +69,9 @@ var GenericWebService = (function () {
     GenericWebService.prototype.start = function () {
         return this.server.start(this.village.getPublicConfig().api);
     };
+    GenericWebService.prototype.stop = function () {
+        return this.server.stop();
+    };
     GenericWebService.prototype.getUserManager = function () {
         return this.userManager;
     };

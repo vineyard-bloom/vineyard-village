@@ -23,6 +23,7 @@ export declare class GenericWebService<Model extends ModelInterface, PrivateConf
     getAuthorizedPreprocessor(): any;
     getAnonymousPreprocessor(): any;
     start(): Promise<void>;
+    stop(): Promise<void>;
     getUserManager(): UserManager;
     getUserService(): UserService;
     getLawnService(): lawn.Server;

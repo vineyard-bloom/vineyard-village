@@ -100,6 +100,10 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
     return this.server.start(this.village.getPublicConfig().api)
   }
 
+  stop(){
+    return this.server.stop()
+  }
+
   getUserManager() {
     return this.userManager
   }
