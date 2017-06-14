@@ -27,7 +27,8 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
     this.server.enable_cors()
 
     this.userManager = new UserManager(this.village.getModel().db, {
-      user_model: this.userModel
+      user_model: this.userModel,
+      model: this.village.getModel()
     })
 
     // Backwards compatibility.  privateConfig.cookies is deprecated

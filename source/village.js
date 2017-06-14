@@ -6,9 +6,10 @@ var vineyard_lawn_logging_1 = require("vineyard-lawn-logging");
 var sequelize = require("sequelize");
 var GenericVillage = (function () {
     function GenericVillage(settings) {
-        this.privateConfig = settings.privateConfig;
-        this.publicConfig = settings.publicConfig;
-        this.model = this.createModel(settings.schema);
+        this.privateConfig = settings.privateConfig || settings.config;
+        this.publicConfig = settings.publicConfig || settings.config;
+        this.config = settings.config;
+        this.model = this.createModel(settings.schema || {});
         this.errorLogger = new vineyard_error_logging_1.StandardErrorLogger(this.model.Error);
     }
     GenericVillage.prototype.createModel = function (schema) {
@@ -32,6 +33,9 @@ var GenericVillage = (function () {
         return this.errorLogger;
     };
     GenericVillage.prototype.getPrivateConfig = function () {
+        return this.privateConfig;
+    };
+    GenericVillage.prototype.getConfig = function () {
         return this.privateConfig;
     };
     GenericVillage.prototype.getPublicConfig = function () {

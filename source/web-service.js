@@ -15,7 +15,8 @@ var GenericWebService = (function () {
         this.server = new lawn.Server(null, this.requestLogger);
         this.server.enable_cors();
         this.userManager = new vineyard_users_1.UserManager(this.village.getModel().db, {
-            user_model: this.userModel
+            user_model: this.userModel,
+            model: this.village.getModel()
         });
         // Backwards compatibility.  privateConfig.cookies is deprecated
         var privateConfig = this.village.getPrivateConfig();

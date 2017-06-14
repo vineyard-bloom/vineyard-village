@@ -12,6 +12,8 @@ export interface ModelInterface {
   Request
 }
 
+export type CommonModel = ModelInterface
+
 export interface DatabaseConfig {
   devMode?: boolean
 }
@@ -24,32 +26,42 @@ export interface PrivateApiConfig {
   cookies: PrivateCookieConfig
 }
 
-export interface CommonPrivateConfig {
+export interface CommonConfig {
   database: DatabaseConfig
   api?: PrivateApiConfig
   cookies?: PrivateCookieConfig // Deprecated.  Use api.cookies instead.
 }
+
+export type CommonPrivateConfig = CommonConfig
+// export interface CommonPrivateConfig {
+//   // database: DatabaseConfig
+//   // api?: PrivateApiConfig
+//   // cookies?: PrivateCookieConfig // Deprecated.  Use api.cookies instead.
+// }
 
 export interface PublicConfig {
 
 }
 
 export interface VillageSettings<PrivateConfig extends CommonPrivateConfig> {
-  privateConfig: PrivateConfig
-  publicConfig: PublicConfig
-  schema: any
+  privateConfig?: PrivateConfig
+  publicConfig?: PublicConfig
+  schema?: any
+  config?: CommonConfig
 }
 
 export class GenericVillage<Model extends ModelInterface, PrivateConfig extends CommonPrivateConfig> {
   private model: Model
   private privateConfig: PrivateConfig
   private publicConfig: PublicConfig
+  private config: CommonConfig
   private errorLogger: StandardErrorLogger
 
   constructor(settings: VillageSettings<PrivateConfig>) {
-    this.privateConfig = settings.privateConfig
-    this.publicConfig = settings.publicConfig
-    this.model = this.createModel(settings.schema)
+    this.privateConfig = settings.privateConfig || settings.config
+    this.publicConfig = settings.publicConfig || settings.config
+    this.config = settings.config
+    this.model = this.createModel(settings.schema || {})
     this.errorLogger = new StandardErrorLogger(this.model.Error)
   }
 
@@ -79,6 +91,10 @@ export class GenericVillage<Model extends ModelInterface, PrivateConfig extends 
   }
 
   getPrivateConfig() {
+    return this.privateConfig
+  }
+
+  getConfig() {
     return this.privateConfig
   }
 
