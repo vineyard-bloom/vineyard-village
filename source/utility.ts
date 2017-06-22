@@ -40,24 +40,35 @@ export function getRootPath(): string {
 }
 
 function compare(first, second, path: string[], secondName: string) {
+  let messages = []
   for (let i in first) {
     const secondValue = second [i]
     if (secondValue === undefined) {
       const pathString = path.concat(i).join('.')
-      const message = secondName + ' is missing "' + pathString + '".'
-      // throw new Error(message)
-      console.error("Config error: ", message)
-      process.exit()
+      messages.push(secondName + ' is missing ' + pathString)
     }
 
     const firstValue = first[i]
     if (firstValue && typeof firstValue === 'object') {
-      compare(firstValue, secondValue, path.concat(i), secondName)
+      messages = messages.concat(compare(firstValue, secondValue, path.concat(i), secondName))
     }
   }
+
+  return messages
 }
 
 export function compareConfigs(firstName: string, first: any, secondName: string, second: any) {
-  compare(first, second, [], secondName)
-  compare(second, first, [], firstName)
+  const messages = [].concat(
+    compare(first, second, [], secondName),
+    compare(second, first, [], firstName),
+  )
+
+  if (messages.length > 0) {
+    console.error("Config errors: ")
+    for (let message of messages) {
+      console.error("  ", message)
+    }
+    process.exit()
+  }
+
 }

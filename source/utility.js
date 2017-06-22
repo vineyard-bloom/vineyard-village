@@ -35,24 +35,30 @@ function getRootPath() {
 }
 exports.getRootPath = getRootPath;
 function compare(first, second, path, secondName) {
+    var messages = [];
     for (var i in first) {
         var secondValue = second[i];
         if (secondValue === undefined) {
             var pathString = path.concat(i).join('.');
-            var message = secondName + ' is missing "' + pathString + '".';
-            // throw new Error(message)
-            console.error("Config error: ", message);
-            process.exit();
+            messages.push(secondName + ' is missing ' + pathString);
         }
         var firstValue = first[i];
         if (firstValue && typeof firstValue === 'object') {
-            compare(firstValue, secondValue, path.concat(i), secondName);
+            messages = messages.concat(compare(firstValue, secondValue, path.concat(i), secondName));
         }
     }
+    return messages;
 }
 function compareConfigs(firstName, first, secondName, second) {
-    compare(first, second, [], secondName);
-    compare(second, first, [], firstName);
+    var messages = [].concat(compare(first, second, [], secondName), compare(second, first, [], firstName));
+    if (messages.length > 0) {
+        console.error("Config errors: ");
+        for (var _i = 0, messages_1 = messages; _i < messages_1.length; _i++) {
+            var message = messages_1[_i];
+            console.error("  ", message);
+        }
+        process.exit();
+    }
 }
 exports.compareConfigs = compareConfigs;
 //# sourceMappingURL=utility.js.map
