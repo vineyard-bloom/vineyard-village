@@ -13,7 +13,7 @@
   "dependencies": {
     "sequelize": "^3.30.4",
     "vineyard-ground": "0.2.x",
-    "vineyard-lawn": "0.4.x",
+    "vineyard-lawn": "0.5.x",
     "vineyard-users": "0.3.x",
     "vineyard-error-logging": "^0.1.0",
     "vineyard-lawn-logging": "^0.1.0"

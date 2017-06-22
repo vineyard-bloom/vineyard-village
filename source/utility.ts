@@ -38,3 +38,26 @@ export function getRootPath(): string {
 
   throw new Error("Could not find application root.")
 }
+
+function compare(first, second, path: string[], secondName: string) {
+  for (let i in first) {
+    const secondValue = second [i]
+    if (secondValue === undefined) {
+      const pathString = path.concat(i).join('.')
+      const message = secondName + ' is missing "' + pathString + '".'
+      // throw new Error(message)
+      console.error("Config error: ", message)
+      process.exit()
+    }
+
+    const firstValue = first[i]
+    if (firstValue && typeof firstValue === 'object') {
+      compare(firstValue, secondValue, path.concat(i), secondName)
+    }
+  }
+}
+
+export function compareConfigs(firstName: string, first: any, secondName: string, second: any) {
+  compare(first, second, [], secondName)
+  compare(second, first, [], firstName)
+}
