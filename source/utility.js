@@ -37,7 +37,7 @@ exports.getRootPath = getRootPath;
 function compare(first, second, path, secondName) {
     var messages = [];
     for (var i in first) {
-        var secondValue = second[i];
+        var secondValue = second ? second[i] : undefined;
         if (secondValue === undefined) {
             var pathString = path.concat(i).join('.');
             messages.push(secondName + ' is missing ' + pathString);

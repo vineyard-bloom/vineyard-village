@@ -42,7 +42,7 @@ export function getRootPath(): string {
 function compare(first, second, path: string[], secondName: string) {
   let messages = []
   for (let i in first) {
-    const secondValue = second [i]
+    const secondValue = second ? second [i] : undefined
     if (secondValue === undefined) {
       const pathString = path.concat(i).join('.')
       messages.push(secondName + ' is missing ' + pathString)
