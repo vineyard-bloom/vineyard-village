@@ -1,4 +1,4 @@
-import {ModelInterface, GenericVillage, CommonPrivateConfig} from "./village";
+import {ModelInterface, GenericVillage, CommonPrivateConfig} from "./generic-village";
 import * as lawn from 'vineyard-lawn'
 import {UserManager, UserService} from "vineyard-users"
 import {Method, Version} from "vineyard-lawn";
@@ -69,7 +69,7 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
     ])
   }
 
-  compileApiSchema(schema) {
+  compileApiSchema(schema):any {
     return this.server.compileApiSchema(schema)
   }
 

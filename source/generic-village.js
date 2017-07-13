@@ -47,4 +47,4 @@ var GenericVillage = (function () {
     return GenericVillage;
 }());
 exports.GenericVillage = GenericVillage;
-//# sourceMappingURL=village.js.map
+//# sourceMappingURL=generic-village.js.map

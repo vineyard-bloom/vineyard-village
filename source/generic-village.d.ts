@@ -25,24 +25,24 @@ export interface CommonConfig {
 export declare type CommonPrivateConfig = CommonConfig;
 export interface PublicConfig {
 }
-export interface VillageSettings<PrivateConfig extends CommonPrivateConfig> {
-    privateConfig?: PrivateConfig;
+export interface VillageSettings<Config extends CommonConfig> {
+    privateConfig?: Config;
     publicConfig?: PublicConfig;
     schema?: any;
     config?: CommonConfig;
 }
-export declare class GenericVillage<Model extends ModelInterface, PrivateConfig extends CommonPrivateConfig> {
+export declare class GenericVillage<Model extends CommonModel, Config extends CommonConfig> {
     private model;
     private privateConfig;
     private publicConfig;
     private config;
     private errorLogger;
-    constructor(settings: VillageSettings<PrivateConfig>);
+    constructor(settings: VillageSettings<Config>);
     private createModel(schema);
     getModel(): Model;
     getErrorLogger(): StandardErrorLogger;
-    getPrivateConfig(): PrivateConfig;
-    getConfig(): PrivateConfig;
+    getPrivateConfig(): Config;
+    getConfig(): Config;
     getPublicConfig(): PublicConfig;
     getGround(): Modeler;
 }

@@ -43,21 +43,21 @@ export interface PublicConfig {
 
 }
 
-export interface VillageSettings<PrivateConfig extends CommonPrivateConfig> {
-  privateConfig?: PrivateConfig
+export interface VillageSettings<Config extends CommonConfig> {
+  privateConfig?: Config
   publicConfig?: PublicConfig
   schema?: any
   config?: CommonConfig
 }
 
-export class GenericVillage<Model extends ModelInterface, PrivateConfig extends CommonPrivateConfig> {
+export class GenericVillage<Model extends CommonModel, Config extends CommonConfig> {
   private model: Model
-  private privateConfig: PrivateConfig
+  private privateConfig: Config
   private publicConfig: PublicConfig
   private config: CommonConfig
   private errorLogger: StandardErrorLogger
 
-  constructor(settings: VillageSettings<PrivateConfig>) {
+  constructor(settings: VillageSettings<Config>) {
     this.privateConfig = settings.privateConfig || settings.config
     this.publicConfig = settings.publicConfig || settings.config
     this.config = settings.config
