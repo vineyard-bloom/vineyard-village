@@ -69,7 +69,7 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
     ])
   }
 
-  compileApiSchema(schema):any {
+  compileApiSchema(schema): any {
     return this.server.compileApiSchema(schema)
   }
 
@@ -101,7 +101,7 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
     return this.server.start(this.village.getPublicConfig().api)
   }
 
-  stop(){
+  stop() {
     return this.server.stop()
   }
 
@@ -115,5 +115,9 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
 
   getLawnService(): lawn.Server {
     return this.server
+  }
+
+  getVillage(): GenericVillage<Model, PrivateConfig> {
+    return this.village
   }
 }

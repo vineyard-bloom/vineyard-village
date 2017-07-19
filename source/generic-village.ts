@@ -1,6 +1,7 @@
 import {Modeler, DevModeler} from "vineyard-ground"
 import {StandardErrorLogger, initializeErrorLogSchema} from "vineyard-error-logging"
 import {initializeRequestLogSchema} from "vineyard-lawn-logging"
+import {loadAndCheckConfig, loadModelSchema} from "./utility";
 
 const sequelize = require("sequelize")
 
@@ -57,7 +58,13 @@ export class GenericVillage<Model extends CommonModel, Config extends CommonConf
   private config: CommonConfig
   private errorLogger: StandardErrorLogger
 
-  constructor(settings: VillageSettings<Config>) {
+  constructor(settings?: VillageSettings<Config>) {
+    if (!settings) {
+      settings = {
+        schema: loadModelSchema<Model>(),
+        config: loadAndCheckConfig<Config>(),
+      }
+    }
     this.privateConfig = settings.privateConfig || settings.config
     this.publicConfig = settings.publicConfig || settings.config
     this.config = settings.config

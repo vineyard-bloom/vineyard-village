@@ -3,9 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var vineyard_ground_1 = require("vineyard-ground");
 var vineyard_error_logging_1 = require("vineyard-error-logging");
 var vineyard_lawn_logging_1 = require("vineyard-lawn-logging");
+var utility_1 = require("./utility");
 var sequelize = require("sequelize");
 var GenericVillage = (function () {
     function GenericVillage(settings) {
+        if (!settings) {
+            settings = {
+                schema: utility_1.loadModelSchema(),
+                config: utility_1.loadAndCheckConfig(),
+            };
+        }
         this.privateConfig = settings.privateConfig || settings.config;
         this.publicConfig = settings.publicConfig || settings.config;
         this.config = settings.config;

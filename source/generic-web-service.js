@@ -82,6 +82,9 @@ var GenericWebService = (function () {
     GenericWebService.prototype.getLawnService = function () {
         return this.server;
     };
+    GenericWebService.prototype.getVillage = function () {
+        return this.village;
+    };
     return GenericWebService;
 }());
 exports.GenericWebService = GenericWebService;

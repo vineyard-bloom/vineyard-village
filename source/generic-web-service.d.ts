@@ -27,4 +27,5 @@ export declare class GenericWebService<Model extends ModelInterface, PrivateConf
     getUserManager(): UserManager;
     getUserService(): UserService;
     getLawnService(): lawn.Server;
+    getVillage(): GenericVillage<Model, PrivateConfig>;
 }

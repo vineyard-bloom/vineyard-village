@@ -70,5 +70,33 @@ export function compareConfigs(firstName: string, first: any, secondName: string
     }
     process.exit()
   }
+}
 
+export function getConfigFolder(): string {
+  const rootPath = getRootPath()
+  return rootPath + '/' + 'config'
+}
+
+export function loadAndCheckConfig<T>(name: string = 'config'): T {
+  const configFolder = getConfigFolder()
+  const config = require(configFolder + '/' + name + '.json')
+  const sampleConfig = require(configFolder + '/' + name + '-sample.json')
+  compareConfigs(name + ".json", config, name + "-sample.json", sampleConfig)
+  return config
+}
+
+export function loadLabConfig<T>(): T {
+  const fs = require('fs')
+  const configFolder = getConfigFolder()
+  const defaultConfig = require(configFolder + '/lab-default.json')
+  const configFilePath = configFolder + '/lab.json'
+  if (fs.fileExistsSync(configFilePath))
+    return Object.assign(defaultConfig, require(configFilePath))
+  else
+    return defaultConfig
+}
+
+export function loadModelSchema<T>(): T {
+  const rootPath = getRootPath()
+  return require(rootPath + '/model/schema.json')
 }

@@ -61,4 +61,34 @@ function compareConfigs(firstName, first, secondName, second) {
     }
 }
 exports.compareConfigs = compareConfigs;
+function getConfigFolder() {
+    var rootPath = getRootPath();
+    return rootPath + '/' + 'config';
+}
+exports.getConfigFolder = getConfigFolder;
+function loadAndCheckConfig(name) {
+    if (name === void 0) { name = 'config'; }
+    var configFolder = getConfigFolder();
+    var config = require(configFolder + '/' + name + '.json');
+    var sampleConfig = require(configFolder + '/' + name + '-sample.json');
+    compareConfigs(name + ".json", config, name + "-sample.json", sampleConfig);
+    return config;
+}
+exports.loadAndCheckConfig = loadAndCheckConfig;
+function loadLabConfig() {
+    var fs = require('fs');
+    var configFolder = getConfigFolder();
+    var defaultConfig = require(configFolder + '/lab-default.json');
+    var configFilePath = configFolder + '/lab.json';
+    if (fs.fileExistsSync(configFilePath))
+        return Object.assign(defaultConfig, require(configFilePath));
+    else
+        return defaultConfig;
+}
+exports.loadLabConfig = loadLabConfig;
+function loadModelSchema() {
+    var rootPath = getRootPath();
+    return require(rootPath + '/model/schema.json');
+}
+exports.loadModelSchema = loadModelSchema;
 //# sourceMappingURL=utility.js.map
