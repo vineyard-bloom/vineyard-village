@@ -37,7 +37,7 @@ export declare class GenericVillage<Model extends CommonModel, Config extends Co
     private publicConfig;
     private config;
     private errorLogger;
-    constructor(settings: VillageSettings<Config>);
+    constructor(settings?: VillageSettings<Config>);
     private createModel(schema);
     getModel(): Model;
     getErrorLogger(): StandardErrorLogger;
