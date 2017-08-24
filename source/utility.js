@@ -80,7 +80,7 @@ function loadLabConfig() {
     var configFolder = getConfigFolder();
     var defaultConfig = require(configFolder + '/lab-default.json');
     var configFilePath = configFolder + '/lab.json';
-    if (fs.fileExistsSync(configFilePath))
+    if (fs.existsSync(configFilePath))
         return Object.assign(defaultConfig, require(configFilePath));
     else
         return defaultConfig;

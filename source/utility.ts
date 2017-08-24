@@ -90,7 +90,7 @@ export function loadLabConfig<T>(): T {
   const configFolder = getConfigFolder()
   const defaultConfig = require(configFolder + '/lab-default.json')
   const configFilePath = configFolder + '/lab.json'
-  if (fs.fileExistsSync(configFilePath))
+  if (fs.existsSync(configFilePath))
     return Object.assign(defaultConfig, require(configFilePath))
   else
     return defaultConfig
