@@ -1,6 +1,6 @@
 {
   "name": "vineyard-village",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Vineyard server framework",
   "main": "source/index.js",
   "types": "source/index.d.ts",
