@@ -25,6 +25,7 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
     this.requestLogger = new CommonRequestLogger(village.getModel().Request, this.village.getErrorLogger())
     this.server = new lawn.Server(null, this.requestLogger)
     this.server.enable_cors()
+    this.server.get_app().enable('trust proxy') // Added for IP tracking through proxies
 
     this.userManager = new UserManager(this.village.getModel().db, {
       user_model: this.userModel,
@@ -37,9 +38,7 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
       ? privateConfig.api.cookies
       : privateConfig.cookies
 
-    this.userService = new UserService(this.server.get_app(), this.userManager, {
-      secret: cookies.secret,
-    })
+    this.userService = new UserService(this.server.get_app(), this.userManager, cookies)
 
     this.authorized = this.preprocessor.createAuthorized(this.userService)
     this.anonymous = this.preprocessor.createAnonymous()

@@ -14,6 +14,7 @@ var GenericWebService = (function () {
         this.requestLogger = new vineyard_lawn_logging_1.CommonRequestLogger(village.getModel().Request, this.village.getErrorLogger());
         this.server = new lawn.Server(null, this.requestLogger);
         this.server.enable_cors();
+        this.server.get_app().enable('trust proxy'); // Added for IP tracking through proxies
         this.userManager = new vineyard_users_1.UserManager(this.village.getModel().db, {
             user_model: this.userModel,
             model: this.village.getModel()
@@ -23,9 +24,7 @@ var GenericWebService = (function () {
         var cookies = privateConfig.api
             ? privateConfig.api.cookies
             : privateConfig.cookies;
-        this.userService = new vineyard_users_1.UserService(this.server.get_app(), this.userManager, {
-            secret: cookies.secret,
-        });
+        this.userService = new vineyard_users_1.UserService(this.server.get_app(), this.userManager, cookies);
         this.authorized = this.preprocessor.createAuthorized(this.userService);
         this.anonymous = this.preprocessor.createAnonymous();
         this.userService.loadValidationHelpers(this.server.getApiSchema());
