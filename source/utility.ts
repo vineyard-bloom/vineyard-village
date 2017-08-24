@@ -98,5 +98,5 @@ export function loadLabConfig<T>(): T {
 
 export function loadModelSchema<T>(): T {
   const rootPath = getRootPath()
-  return require(rootPath + '/model/schema.json')
+  return require(rootPath + '/src/model/schema.json')
 }

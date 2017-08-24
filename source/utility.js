@@ -88,7 +88,7 @@ function loadLabConfig() {
 exports.loadLabConfig = loadLabConfig;
 function loadModelSchema() {
     var rootPath = getRootPath();
-    return require(rootPath + '/model/schema.json');
+    return require(rootPath + '/src/model/schema.json');
 }
 exports.loadModelSchema = loadModelSchema;
 //# sourceMappingURL=utility.js.map
