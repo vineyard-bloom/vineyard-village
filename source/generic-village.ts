@@ -17,6 +17,7 @@ export type CommonModel = ModelInterface
 
 export interface DatabaseConfig {
   devMode?: boolean
+  dialect?: string
 }
 
 export interface PrivateCookieConfig {
@@ -45,8 +46,8 @@ export interface PublicConfig {
 }
 
 export interface VillageSettings<Config extends CommonConfig> {
-  privateConfig?: Config
-  publicConfig?: PublicConfig
+  privateConfig?: Config // Deprecated
+  publicConfig?: PublicConfig // Deprecated
   schema?: any
   config?: CommonConfig
 }
@@ -75,6 +76,12 @@ export class GenericVillage<Model extends CommonModel, Config extends CommonConf
   private createModel(schema): Model {
     const databaseConfig = this.privateConfig.database
     const db = new sequelize(databaseConfig)
+    if (databaseConfig.dialect == 'postgres') {
+      const usePostgres = require('vineyard-ground').usePostgres
+      if (usePostgres)
+        usePostgres(db, databaseConfig)
+    }
+
     const modeler = !databaseConfig.devMode
       ? new Modeler(db, schema)
       : new DevModeler(db, schema)

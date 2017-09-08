@@ -10,6 +10,7 @@ export interface ModelInterface {
 export declare type CommonModel = ModelInterface;
 export interface DatabaseConfig {
     devMode?: boolean;
+    dialect?: string;
 }
 export interface PrivateCookieConfig {
     secret: string;

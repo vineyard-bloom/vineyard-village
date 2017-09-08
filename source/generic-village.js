@@ -22,6 +22,11 @@ var GenericVillage = (function () {
     GenericVillage.prototype.createModel = function (schema) {
         var databaseConfig = this.privateConfig.database;
         var db = new sequelize(databaseConfig);
+        if (databaseConfig.dialect == 'postgres') {
+            var usePostgres = require('vineyard-ground').usePostgres;
+            if (usePostgres)
+                usePostgres(db, databaseConfig);
+        }
         var modeler = !databaseConfig.devMode
             ? new vineyard_ground_1.Modeler(db, schema)
             : new vineyard_ground_1.DevModeler(db, schema);
