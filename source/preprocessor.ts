@@ -26,7 +26,7 @@ export class Preprocessor {
       throw new Bad_Request("Unsupported version number")
   }
 
-  common(request): Promise<Request> {
+  common(request: Request): Promise<Request> {
     this.checkVersion(request)
     return Promise.resolve(request)
   }

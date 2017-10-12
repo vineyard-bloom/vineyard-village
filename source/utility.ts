@@ -14,7 +14,7 @@ function findPackageDirectory(originalPath: string) {
 }
 
 function listModules() {
-  let currentModule = module
+  let currentModule: NodeModule | null = module
   const result = []
 
   while (currentModule != null) {
@@ -39,8 +39,8 @@ export function getRootPath(): string {
   throw new Error("Could not find application root.")
 }
 
-function compare(first, second, path: string[], secondName: string) {
-  let messages = []
+function compare(first: any, second: any, path: string[], secondName: string): string[] {
+  let messages: string[] = []
   for (let i in first) {
     const secondValue = second ? second [i] : undefined
     if (secondValue === undefined) {
@@ -58,7 +58,7 @@ function compare(first, second, path: string[], secondName: string) {
 }
 
 export function compareConfigs(firstName: string, first: any, secondName: string, second: any) {
-  const messages = [].concat(
+  const messages = ([] as string[]).concat(
     compare(first, second, [], secondName),
     compare(second, first, [], firstName),
   )

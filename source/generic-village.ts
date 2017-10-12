@@ -6,11 +6,11 @@ import {loadAndCheckConfig, loadModelSchema} from "./utility";
 const sequelize = require("sequelize")
 
 export interface ModelInterface {
-  ground
-  db
-  User
-  Error
-  Request
+  ground: any
+  db: any
+  User: any
+  Error: any
+  Request: any
 }
 
 export type CommonModel = ModelInterface
@@ -42,7 +42,7 @@ export type CommonPrivateConfig = CommonConfig
 // }
 
 export interface PublicConfig {
-
+  api: any
 }
 
 export interface VillageSettings<Config extends CommonConfig> {
@@ -56,7 +56,7 @@ export class GenericVillage<Model extends CommonModel, Config extends CommonConf
   private model: Model
   private privateConfig: Config
   private publicConfig: PublicConfig
-  private config: CommonConfig
+  private config: CommonConfig | undefined
   private errorLogger: StandardErrorLogger
 
   constructor(settings?: VillageSettings<Config>) {
@@ -66,14 +66,14 @@ export class GenericVillage<Model extends CommonModel, Config extends CommonConf
         config: loadAndCheckConfig<Config>(),
       }
     }
-    this.privateConfig = settings.privateConfig || settings.config
-    this.publicConfig = settings.publicConfig || settings.config
+    this.privateConfig = (settings.privateConfig || settings.config) as any
+    this.publicConfig = (settings.publicConfig || settings.config) as any
     this.config = settings.config
     this.model = this.createModel(settings.schema || {})
     this.errorLogger = new StandardErrorLogger(this.model.Error)
   }
 
-  private createModel(schema): Model {
+  private createModel(schema: any): Model {
     const databaseConfig = this.privateConfig.database
     const db = new sequelize(databaseConfig)
     if (databaseConfig.dialect == 'postgres') {
@@ -92,7 +92,7 @@ export class GenericVillage<Model extends CommonModel, Config extends CommonConf
     const model = Object.assign({
       ground: modeler,
       db: db
-    }, modeler.collections)
+    }, modeler.collections) as any
     return model
   }
 

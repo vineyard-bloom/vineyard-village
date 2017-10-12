@@ -1,8 +1,8 @@
 var request = require('request');
 
-export function requestPromise (options) {
+export function requestPromise (options: any) {
   return new Promise(function (resolve, reject) {
-    request(options, function (error, response, body) {
+    request(options, function (error: Error, response: any, body: any) {
       if (error)
         reject(error)
       else if (response.statusCode < 200 || response.statusCode >= 300)
