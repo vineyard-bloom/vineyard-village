@@ -1,9 +1,7 @@
-import {Modeler, DevModeler} from "vineyard-ground"
+import {Modeler, DevModeler, PostgresClient, GeneralDatabaseConfig, SequelizeClient} from "vineyard-ground"
 import {StandardErrorLogger, initializeErrorLogSchema} from "vineyard-error-logging"
 import {initializeRequestLogSchema} from "vineyard-lawn-logging"
 import {loadAndCheckConfig, loadModelSchema} from "./utility";
-
-const sequelize = require("sequelize")
 
 export interface ModelInterface {
   ground: any
@@ -15,13 +13,12 @@ export interface ModelInterface {
 
 export type CommonModel = ModelInterface
 
-export interface DatabaseConfig {
-  devMode?: boolean
-  dialect?: string
-}
-
 export interface PrivateCookieConfig {
   secret: string
+}
+
+export interface VillageDatabaseConfig extends GeneralDatabaseConfig {
+  devMode?: true
 }
 
 export interface PrivateApiConfig {
@@ -29,7 +26,7 @@ export interface PrivateApiConfig {
 }
 
 export interface CommonConfig {
-  database: DatabaseConfig
+  database: VillageDatabaseConfig
   api?: PrivateApiConfig
   cookies?: PrivateCookieConfig // Deprecated.  Use api.cookies instead.
 }
@@ -75,23 +72,22 @@ export class GenericVillage<Model extends CommonModel, Config extends CommonConf
 
   private createModel(schema: any): Model {
     const databaseConfig = this.privateConfig.database
-    const db = new sequelize(databaseConfig)
-    if (databaseConfig.dialect == 'postgres') {
-      const usePostgres = require('vineyard-ground').usePostgres
-      if (usePostgres)
-        usePostgres(db, databaseConfig)
-    }
+
+    const client = databaseConfig.dialect == 'postgres'
+      ? new PostgresClient(databaseConfig)
+      : new SequelizeClient(databaseConfig)
+
 
     const modeler = !databaseConfig.devMode
-      ? new Modeler(db, schema)
-      : new DevModeler(db, schema)
+      ? new Modeler(schema, client)
+      : new DevModeler(schema, client)
 
     initializeErrorLogSchema(modeler)
     initializeRequestLogSchema(modeler)
 
     const model = Object.assign({
       ground: modeler,
-      db: db
+      db: modeler.getLegacyDatabaseInterface(),
     }, modeler.collections) as any
     return model
   }
