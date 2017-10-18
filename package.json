@@ -1,6 +1,6 @@
 {
   "name": "vineyard-village",
-  "version": "0.2.6",
+  "version": "1.0.0-beta.0",
   "description": "Vineyard server framework",
   "main": "source/index.js",
   "types": "source/index.d.ts",
@@ -12,9 +12,9 @@
   "license": "MIT",
   "dependencies": {
     "sequelize": "^3.30.4",
-    "vineyard-ground": "vineyard-bloom/vineyard-ground",
+    "vineyard-ground": "vineyard-bloom/vineyard-ground#1.0.0-beta",
     "vineyard-lawn": "vineyard-bloom/vineyard-lawn",
-    "vineyard-users": "vineyard-bloom/vineyard-users",
+    "vineyard-users": "vineyard-bloom/vineyard-users#1.0.0-beta",
     "vineyard-error-logging": "vineyard-bloom/vineyard-error-logging",
     "vineyard-lawn-logging": "vineyard-bloom/vineyard-lawn-logging"
   },
