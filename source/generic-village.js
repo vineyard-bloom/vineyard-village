@@ -4,8 +4,7 @@ var vineyard_ground_1 = require("vineyard-ground");
 var vineyard_error_logging_1 = require("vineyard-error-logging");
 var vineyard_lawn_logging_1 = require("vineyard-lawn-logging");
 var utility_1 = require("./utility");
-var sequelize = require("sequelize");
-var GenericVillage = (function () {
+var GenericVillage = /** @class */ (function () {
     function GenericVillage(settings) {
         if (!settings) {
             settings = {
@@ -13,28 +12,25 @@ var GenericVillage = (function () {
                 config: utility_1.loadAndCheckConfig(),
             };
         }
-        this.privateConfig = settings.privateConfig || settings.config;
-        this.publicConfig = settings.publicConfig || settings.config;
+        this.privateConfig = (settings.privateConfig || settings.config);
+        this.publicConfig = (settings.publicConfig || settings.config);
         this.config = settings.config;
         this.model = this.createModel(settings.schema || {});
         this.errorLogger = new vineyard_error_logging_1.StandardErrorLogger(this.model.Error);
     }
     GenericVillage.prototype.createModel = function (schema) {
         var databaseConfig = this.privateConfig.database;
-        var db = new sequelize(databaseConfig);
-        if (databaseConfig.dialect == 'postgres') {
-            var usePostgres = require('vineyard-ground').usePostgres;
-            if (usePostgres)
-                usePostgres(db, databaseConfig);
-        }
+        var client = databaseConfig.dialect == 'postgres'
+            ? new vineyard_ground_1.PostgresClient(databaseConfig)
+            : new vineyard_ground_1.SequelizeClient(databaseConfig);
         var modeler = !databaseConfig.devMode
-            ? new vineyard_ground_1.Modeler(db, schema)
-            : new vineyard_ground_1.DevModeler(db, schema);
+            ? new vineyard_ground_1.Modeler(schema, client)
+            : new vineyard_ground_1.DevModeler(schema, client);
         vineyard_error_logging_1.initializeErrorLogSchema(modeler);
         vineyard_lawn_logging_1.initializeRequestLogSchema(modeler);
         var model = Object.assign({
             ground: modeler,
-            db: db
+            db: modeler.getLegacyDatabaseInterface(),
         }, modeler.collections);
         return model;
     };

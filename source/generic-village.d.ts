@@ -1,4 +1,4 @@
-import { Modeler } from "vineyard-ground";
+import { Modeler, GeneralDatabaseConfig } from "vineyard-ground";
 import { StandardErrorLogger } from "vineyard-error-logging";
 export interface ModelInterface {
     ground: any;
@@ -8,23 +8,23 @@ export interface ModelInterface {
     Request: any;
 }
 export declare type CommonModel = ModelInterface;
-export interface DatabaseConfig {
-    devMode?: boolean;
-    dialect?: string;
-}
 export interface PrivateCookieConfig {
     secret: string;
+}
+export interface VillageDatabaseConfig extends GeneralDatabaseConfig {
+    devMode?: true;
 }
 export interface PrivateApiConfig {
     cookies: PrivateCookieConfig;
 }
 export interface CommonConfig {
-    database: DatabaseConfig;
+    database: VillageDatabaseConfig;
     api?: PrivateApiConfig;
     cookies?: PrivateCookieConfig;
 }
 export declare type CommonPrivateConfig = CommonConfig;
 export interface PublicConfig {
+    api: any;
 }
 export interface VillageSettings<Config extends CommonConfig> {
     privateConfig?: Config;
