@@ -4,7 +4,7 @@ export declare class Preprocessor {
     versions: Version[];
     constructor(versions: Version[]);
     checkVersion(request: Request): void;
-    common(request: any): Promise<Request>;
+    common(request: Request): Promise<Request>;
     createAnonymous(): Request_Processor;
     createAuthorized(userService: UserService): Request_Processor;
 }

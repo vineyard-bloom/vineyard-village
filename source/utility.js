@@ -35,6 +35,18 @@ function getRootPath() {
 }
 exports.getRootPath = getRootPath;
 function compare(first, second, path, secondName) {
+    if (Array.isArray(first) && Array.isArray(second)) {
+        return [];
+    }
+    else if (Array.isArray(first)) {
+        if (!second)
+            return []; // This will already be handled by the other pass.  Returning an empty array to avoid duplicates.
+        return [path + ' is not an array in ' + secondName];
+    }
+    else if (Array.isArray(second)) {
+        // This will already be handled by the other pass.  Returning an empty array to avoid duplicates.
+        return [];
+    }
     var messages = [];
     for (var i in first) {
         var secondValue = second ? second[i] : undefined;
@@ -49,8 +61,12 @@ function compare(first, second, path, secondName) {
     }
     return messages;
 }
+function diffConfigs(firstName, first, secondName, second) {
+    return [].concat(compare(first, second, [], secondName), compare(second, first, [], firstName));
+}
+exports.diffConfigs = diffConfigs;
 function compareConfigs(firstName, first, secondName, second) {
-    var messages = [].concat(compare(first, second, [], secondName), compare(second, first, [], firstName));
+    var messages = diffConfigs(firstName, first, secondName, second);
     if (messages.length > 0) {
         console.error("Config errors: ");
         for (var _i = 0, messages_1 = messages; _i < messages_1.length; _i++) {

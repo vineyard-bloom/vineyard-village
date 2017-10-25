@@ -4,8 +4,8 @@ var vineyard_ground_1 = require("vineyard-ground");
 var vineyard_error_logging_1 = require("vineyard-error-logging");
 var vineyard_lawn_logging_1 = require("vineyard-lawn-logging");
 var utility_1 = require("./utility");
-var GenericVillage = /** @class */ (function () {
-    function GenericVillage(settings) {
+var GenericVillage = (function () {
+    function GenericVillage(settings, client) {
         if (!settings) {
             settings = {
                 schema: utility_1.loadModelSchema(),
@@ -15,14 +15,16 @@ var GenericVillage = /** @class */ (function () {
         this.privateConfig = (settings.privateConfig || settings.config);
         this.publicConfig = (settings.publicConfig || settings.config);
         this.config = settings.config;
-        this.model = this.createModel(settings.schema || {});
+        this.model = this.createModel(settings.schema || {}, client);
         this.errorLogger = new vineyard_error_logging_1.StandardErrorLogger(this.model.Error);
     }
-    GenericVillage.prototype.createModel = function (schema) {
+    GenericVillage.prototype.createModel = function (schema, client) {
+        if (client === void 0) { client = new vineyard_ground_1.SequelizeClient(this.privateConfig.database); }
         var databaseConfig = this.privateConfig.database;
-        var client = databaseConfig.dialect == 'postgres'
-            ? new vineyard_ground_1.PostgresClient(databaseConfig)
-            : new vineyard_ground_1.SequelizeClient(databaseConfig);
+        // const client = databaseConfig.dialect == 'postgres'
+        //   ? new PostgresClient(databaseConfig)
+        //   : new SequelizeClient(databaseConfig)
+        // const client = new SequelizeClient(databaseConfig)
         var modeler = !databaseConfig.devMode
             ? new vineyard_ground_1.Modeler(schema, client)
             : new vineyard_ground_1.DevModeler(schema, client);

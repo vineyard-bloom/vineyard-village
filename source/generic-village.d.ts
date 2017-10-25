@@ -1,4 +1,4 @@
-import { Modeler, GeneralDatabaseConfig } from "vineyard-ground";
+import { Modeler, GeneralDatabaseConfig, DatabaseClient } from "vineyard-ground";
 import { StandardErrorLogger } from "vineyard-error-logging";
 export interface ModelInterface {
     ground: any;
@@ -38,8 +38,8 @@ export declare class GenericVillage<Model extends CommonModel, Config extends Co
     private publicConfig;
     private config;
     private errorLogger;
-    constructor(settings?: VillageSettings<Config>);
-    private createModel(schema);
+    constructor(settings?: VillageSettings<Config>, client?: DatabaseClient);
+    private createModel(schema, client?);
     getModel(): Model;
     getErrorLogger(): StandardErrorLogger;
     getPrivateConfig(): Config;

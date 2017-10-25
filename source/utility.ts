@@ -40,7 +40,22 @@ export function getRootPath(): string {
 }
 
 function compare(first: any, second: any, path: string[], secondName: string): string[] {
+  if (Array.isArray(first) && Array.isArray(second)) {
+    return []
+  }
+  else if (Array.isArray(first)) {
+    if (!second)
+      return [] // This will already be handled by the other pass.  Returning an empty array to avoid duplicates.
+
+    return [path + ' is not an array in ' + secondName]
+  }
+  else if (Array.isArray(second)) {
+    // This will already be handled by the other pass.  Returning an empty array to avoid duplicates.
+    return []
+  }
+
   let messages: string[] = []
+
   for (let i in first) {
     const secondValue = second ? second [i] : undefined
     if (secondValue === undefined) {
@@ -57,11 +72,16 @@ function compare(first: any, second: any, path: string[], secondName: string): s
   return messages
 }
 
-export function compareConfigs(firstName: string, first: any, secondName: string, second: any) {
-  const messages = ([] as string[]).concat(
+
+export function diffConfigs(firstName: string, first: any, secondName: string, second: any) {
+  return ([] as string[]).concat(
     compare(first, second, [], secondName),
     compare(second, first, [], firstName),
   )
+}
+
+export function compareConfigs(firstName: string, first: any, secondName: string, second: any) {
+  const messages = diffConfigs(firstName, first, secondName, second)
 
   if (messages.length > 0) {
     console.error("Config errors: ")
