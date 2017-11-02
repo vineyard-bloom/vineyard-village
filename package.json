@@ -11,7 +11,6 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "sequelize": "^3.30.4",
     "vineyard-error-logging": "vineyard-bloom/vineyard-error-logging",
     "vineyard-ground": "vineyard-bloom/vineyard-ground#1.0.0-beta",
     "vineyard-lawn": "vineyard-bloom/vineyard-lawn",
@@ -20,7 +19,6 @@
   },
   "devDependencies": {
     "@types/chai": "^4.0.4",
-    "@types/express": "^4.0.35",
     "@types/mocha": "^2.2.40",
     "@types/node": "^7.0.5",
     "chai": "^4.1.2",

@@ -97,8 +97,7 @@ export function getConfigFolder(): string {
   return rootPath + '/' + 'config'
 }
 
-export function loadAndCheckConfig<T>(name: string = 'config'): T {
-  const configFolder = getConfigFolder()
+export function loadAndCheckConfig<T>(name: string = 'config', configFolder:string = getConfigFolder()): T {
   const config = require(configFolder + '/' + name + '.json')
   const sampleConfig = require(configFolder + '/' + name + '-sample.json')
   compareConfigs(name + ".json", config, name + "-sample.json", sampleConfig)

@@ -82,9 +82,9 @@ function getConfigFolder() {
     return rootPath + '/' + 'config';
 }
 exports.getConfigFolder = getConfigFolder;
-function loadAndCheckConfig(name) {
+function loadAndCheckConfig(name, configFolder) {
     if (name === void 0) { name = 'config'; }
-    var configFolder = getConfigFolder();
+    if (configFolder === void 0) { configFolder = getConfigFolder(); }
     var config = require(configFolder + '/' + name + '.json');
     var sampleConfig = require(configFolder + '/' + name + '-sample.json');
     compareConfigs(name + ".json", config, name + "-sample.json", sampleConfig);
