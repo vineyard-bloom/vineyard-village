@@ -2,8 +2,6 @@ import {
   Modeler, DevModeler, PostgresClient, GeneralDatabaseConfig, SequelizeClient,
   DatabaseClient
 } from "vineyard-ground"
-import {StandardErrorLogger, initializeErrorLogSchema} from "vineyard-error-logging"
-import {initializeRequestLogSchema} from "vineyard-lawn-logging"
 import {loadAndCheckConfig, loadModelSchema} from "./utility";
 
 export interface ModelInterface {
@@ -57,7 +55,6 @@ export class GenericVillage<Model extends CommonModel, Config extends CommonConf
   private privateConfig: Config
   private publicConfig: PublicConfig
   private config: CommonConfig | undefined
-  private errorLogger: StandardErrorLogger
 
   constructor(settings?: VillageSettings<Config>, client?: DatabaseClient) {
     if (!settings) {
@@ -71,23 +68,14 @@ export class GenericVillage<Model extends CommonModel, Config extends CommonConf
     this.publicConfig = (settings.publicConfig || settings.config) as any
     this.config = settings.config
     this.model = this.createModel(settings.schema || {}, client)
-    this.errorLogger = new StandardErrorLogger(this.model.Error)
   }
 
   private createModel(schema: any, client: DatabaseClient = new SequelizeClient(this.privateConfig.database)): Model {
     const databaseConfig = this.privateConfig.database
 
-    // const client = databaseConfig.dialect == 'postgres'
-    //   ? new PostgresClient(databaseConfig)
-    //   : new SequelizeClient(databaseConfig)
-    // const client = new SequelizeClient(databaseConfig)
-
     const modeler = !databaseConfig.devMode
       ? new Modeler(schema, client)
       : new DevModeler(schema, client)
-
-    initializeErrorLogSchema(modeler)
-    initializeRequestLogSchema(modeler)
 
     const model = Object.assign({
       ground: modeler,
@@ -98,10 +86,6 @@ export class GenericVillage<Model extends CommonModel, Config extends CommonConf
 
   getModel(): Model {
     return this.model
-  }
-
-  getErrorLogger(): StandardErrorLogger {
-    return this.errorLogger
   }
 
   getPrivateConfig() {

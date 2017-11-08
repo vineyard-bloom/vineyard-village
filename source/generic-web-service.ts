@@ -3,7 +3,6 @@ import * as lawn from 'vineyard-lawn'
 import {UserManager, UserService} from "vineyard-users"
 import {Method, Version} from "vineyard-lawn";
 import {Preprocessor} from "./preprocessor";
-import {CommonRequestLogger} from "vineyard-lawn-logging"
 
 export class GenericWebService<Model extends ModelInterface, PrivateConfig extends CommonPrivateConfig> {
   village: GenericVillage<Model, PrivateConfig>
@@ -15,15 +14,13 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
   private preprocessor: Preprocessor
   private anonymous:any
   private authorized:any
-  private requestLogger: CommonRequestLogger
 
   constructor(village: GenericVillage<Model, PrivateConfig>, versions: Version[]) {
     this.village = village
     this.userModel = village.getModel().User
     this.versions = versions
     this.preprocessor = new Preprocessor(this.versions)
-    this.requestLogger = new CommonRequestLogger(village.getModel().Request, this.village.getErrorLogger())
-    this.server = new lawn.Server(undefined, this.requestLogger)
+    this.server = new lawn.Server(undefined, undefined)
     this.server.enable_cors()
     this.server.get_app().enable('trust proxy') // Added for IP tracking through proxies
 

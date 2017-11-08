@@ -12,7 +12,6 @@ export declare class GenericWebService<Model extends ModelInterface, PrivateConf
     private preprocessor;
     private anonymous;
     private authorized;
-    private requestLogger;
     constructor(village: GenericVillage<Model, PrivateConfig>, versions: Version[]);
     private initialize_endpoints();
     compileApiSchema(schema: any): any;

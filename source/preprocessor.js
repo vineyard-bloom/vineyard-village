@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var vineyard_lawn_1 = require("vineyard-lawn");
-var Preprocessor = (function () {
+var Preprocessor = /** @class */ (function () {
     function Preprocessor(versions) {
         if (!versions.length)
             throw new Error('Preprocessor.versions array cannot be empty.');

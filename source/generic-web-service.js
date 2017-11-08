@@ -4,15 +4,13 @@ var lawn = require("vineyard-lawn");
 var vineyard_users_1 = require("vineyard-users");
 var vineyard_lawn_1 = require("vineyard-lawn");
 var preprocessor_1 = require("./preprocessor");
-var vineyard_lawn_logging_1 = require("vineyard-lawn-logging");
-var GenericWebService = (function () {
+var GenericWebService = /** @class */ (function () {
     function GenericWebService(village, versions) {
         this.village = village;
         this.userModel = village.getModel().User;
         this.versions = versions;
         this.preprocessor = new preprocessor_1.Preprocessor(this.versions);
-        this.requestLogger = new vineyard_lawn_logging_1.CommonRequestLogger(village.getModel().Request, this.village.getErrorLogger());
-        this.server = new lawn.Server(undefined, this.requestLogger);
+        this.server = new lawn.Server(undefined, undefined);
         this.server.enable_cors();
         this.server.get_app().enable('trust proxy'); // Added for IP tracking through proxies
         this.userManager = new vineyard_users_1.UserManager(this.village.getModel().db, {
