@@ -1,4 +1,5 @@
 import { Modeler, GeneralDatabaseConfig, DatabaseClient } from "vineyard-ground";
+import { CookieSettings } from 'vineyard-users';
 export interface ModelInterface {
     ground: any;
     db: any;
@@ -14,12 +15,12 @@ export interface VillageDatabaseConfig extends GeneralDatabaseConfig {
     devMode?: true;
 }
 export interface PrivateApiConfig {
-    cookies: PrivateCookieConfig;
+    cookies: CookieSettings;
 }
 export interface CommonConfig {
     database: VillageDatabaseConfig;
     api?: PrivateApiConfig;
-    cookies?: PrivateCookieConfig;
+    cookies?: CookieSettings;
 }
 export declare type CommonPrivateConfig = CommonConfig;
 export interface PublicConfig {

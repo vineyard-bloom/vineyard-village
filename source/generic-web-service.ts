@@ -21,8 +21,8 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
     this.versions = versions
     this.preprocessor = new Preprocessor(this.versions)
     this.server = new lawn.Server(undefined, undefined)
-    this.server.enable_cors()
-    this.server.get_app().enable('trust proxy') // Added for IP tracking through proxies
+    this.server.enableCors()
+    this.server.getApp().enable('trust proxy') // Added for IP tracking through proxies
 
     this.userManager = new UserManager(this.village.getModel().db, {
       user_model: this.userModel,
@@ -38,7 +38,7 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
     if (!cookies)
       throw new Error("Missing api.cookies config.")
 
-    this.userService = new UserService(this.server.get_app(), this.userManager, cookies)
+    this.userService = new UserService(this.server.getApp(), this.userManager, cookies)
 
     this.authorized = this.preprocessor.createAuthorized(this.userService)
     this.anonymous = this.preprocessor.createAnonymous()
@@ -52,7 +52,7 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
       {
         method: Method.post,
         path: "user/login",
-        action: this.userService.create_login_handler()
+        action: this.userService.loginWithUsername
       },
 
     ])
@@ -62,7 +62,7 @@ export class GenericWebService<Model extends ModelInterface, PrivateConfig exten
       {
         method: Method.post,
         path: "user/logout",
-        action: this.userService.create_logout_handler()
+        action: this.userService.logout
       },
 
     ])
