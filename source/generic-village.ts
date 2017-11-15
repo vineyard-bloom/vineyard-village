@@ -3,6 +3,7 @@ import {
   DatabaseClient
 } from "vineyard-ground"
 import {loadAndCheckConfig, loadModelSchema} from "./utility";
+import {CookieSettings} from 'vineyard-users';
 
 export interface ModelInterface {
   ground: any
@@ -23,13 +24,13 @@ export interface VillageDatabaseConfig extends GeneralDatabaseConfig {
 }
 
 export interface PrivateApiConfig {
-  cookies: PrivateCookieConfig
+  cookies: CookieSettings
 }
 
 export interface CommonConfig {
   database: VillageDatabaseConfig
   api?: PrivateApiConfig
-  cookies?: PrivateCookieConfig // Deprecated.  Use api.cookies instead.
+  cookies?: CookieSettings // Deprecated.  Use api.cookies instead.
 }
 
 export type CommonPrivateConfig = CommonConfig
