@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var vineyard_ground_1 = require("vineyard-ground");
 var utility_1 = require("./utility");
-var GenericVillage = /** @class */ (function () {
+var GenericVillage = (function () {
     function GenericVillage(settings, client) {
         if (!settings) {
             settings = {

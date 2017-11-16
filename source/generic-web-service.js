@@ -4,15 +4,15 @@ var lawn = require("vineyard-lawn");
 var vineyard_users_1 = require("vineyard-users");
 var vineyard_lawn_1 = require("vineyard-lawn");
 var preprocessor_1 = require("./preprocessor");
-var GenericWebService = /** @class */ (function () {
+var GenericWebService = (function () {
     function GenericWebService(village, versions) {
         this.village = village;
         this.userModel = village.getModel().User;
         this.versions = versions;
         this.preprocessor = new preprocessor_1.Preprocessor(this.versions);
         this.server = new lawn.Server(undefined, undefined);
-        this.server.enable_cors();
-        this.server.get_app().enable('trust proxy'); // Added for IP tracking through proxies
+        this.server.enableCors();
+        this.server.getApp().enable('trust proxy'); // Added for IP tracking through proxies
         this.userManager = new vineyard_users_1.UserManager(this.village.getModel().db, {
             user_model: this.userModel,
             model: this.village.getModel()
@@ -24,7 +24,7 @@ var GenericWebService = /** @class */ (function () {
             : privateConfig.cookies;
         if (!cookies)
             throw new Error("Missing api.cookies config.");
-        this.userService = new vineyard_users_1.UserService(this.server.get_app(), this.userManager, cookies);
+        this.userService = new vineyard_users_1.UserService(this.server.getApp(), this.userManager, cookies);
         this.authorized = this.preprocessor.createAuthorized(this.userService);
         this.anonymous = this.preprocessor.createAnonymous();
         this.userService.loadValidationHelpers(this.server.getApiSchema());
@@ -34,14 +34,14 @@ var GenericWebService = /** @class */ (function () {
             {
                 method: vineyard_lawn_1.Method.post,
                 path: "user/login",
-                action: this.userService.create_login_handler()
+                action: this.userService.loginWithUsername
             },
         ]);
         this.createAuthorizedEndpoints([
             {
                 method: vineyard_lawn_1.Method.post,
                 path: "user/logout",
-                action: this.userService.create_logout_handler()
+                action: this.userService.logout
             },
         ]);
     };
