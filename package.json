@@ -12,7 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "vineyard-ground": "vineyard-bloom/vineyard-ground#1.0.0-beta",
-    "vineyard-lawn": "vineyard-bloom/vineyard-lawn",
+    "vineyard-lawn": "vineyard-bloom/vineyard-lawn#1.0.0-beta",
     "vineyard-users": "vineyard-bloom/vineyard-users#1.0.0-beta"
   },
   "devDependencies": {
