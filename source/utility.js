@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs = require("fs");
-var path = require("path");
+const fs = require("fs");
+const path = require("path");
 function findPackageDirectory(originalPath) {
-    var currentPath = originalPath;
+    let currentPath = originalPath;
     while (!fs.existsSync(path.join(currentPath, 'package.json'))) {
-        var nextPath = path.resolve(currentPath, '..');
+        const nextPath = path.resolve(currentPath, '..');
         if (nextPath == currentPath)
             return null;
         currentPath = nextPath;
@@ -13,8 +13,8 @@ function findPackageDirectory(originalPath) {
     return currentPath;
 }
 function listModules() {
-    var currentModule = module;
-    var result = [];
+    let currentModule = module;
+    const result = [];
     while (currentModule != null) {
         result.unshift(currentModule);
         currentModule = currentModule.parent;
@@ -22,9 +22,9 @@ function listModules() {
     return result;
 }
 function getRootPath() {
-    var modules = listModules();
+    const modules = listModules();
     for (var i = 0; i < modules.length; ++i) {
-        var packageDirectory = findPackageDirectory(path.dirname(modules[i].filename));
+        const packageDirectory = findPackageDirectory(path.dirname(modules[i].filename));
         if (packageDirectory) {
             if (fs.existsSync(path.join(packageDirectory, 'config'))) {
                 return packageDirectory;
@@ -47,14 +47,14 @@ function compare(first, second, path, secondName) {
         // This will already be handled by the other pass.  Returning an empty array to avoid duplicates.
         return [];
     }
-    var messages = [];
-    for (var i in first) {
-        var secondValue = second ? second[i] : undefined;
+    let messages = [];
+    for (let i in first) {
+        const secondValue = second ? second[i] : undefined;
         if (secondValue === undefined) {
-            var pathString = path.concat(i).join('.');
+            const pathString = path.concat(i).join('.');
             messages.push(secondName + ' is missing ' + pathString);
         }
-        var firstValue = first[i];
+        const firstValue = first[i];
         if (firstValue && typeof firstValue === 'object') {
             messages = messages.concat(compare(firstValue, secondValue, path.concat(i), secondName));
         }
@@ -66,11 +66,10 @@ function diffConfigs(firstName, first, secondName, second) {
 }
 exports.diffConfigs = diffConfigs;
 function compareConfigs(firstName, first, secondName, second) {
-    var messages = diffConfigs(firstName, first, secondName, second);
+    const messages = diffConfigs(firstName, first, secondName, second);
     if (messages.length > 0) {
         console.error("Config errors: ");
-        for (var _i = 0, messages_1 = messages; _i < messages_1.length; _i++) {
-            var message = messages_1[_i];
+        for (let message of messages) {
             console.error("  ", message);
         }
         process.exit();
@@ -78,24 +77,22 @@ function compareConfigs(firstName, first, secondName, second) {
 }
 exports.compareConfigs = compareConfigs;
 function getConfigFolder() {
-    var rootPath = getRootPath();
+    const rootPath = getRootPath();
     return rootPath + '/' + 'config';
 }
 exports.getConfigFolder = getConfigFolder;
-function loadAndCheckConfig(name, configFolder) {
-    if (name === void 0) { name = 'config'; }
-    if (configFolder === void 0) { configFolder = getConfigFolder(); }
-    var config = require(configFolder + '/' + name + '.json');
-    var sampleConfig = require(configFolder + '/' + name + '-sample.json');
+function loadAndCheckConfig(name = 'config', configFolder = getConfigFolder()) {
+    const config = require(configFolder + '/' + name + '.json');
+    const sampleConfig = require(configFolder + '/' + name + '-sample.json');
     compareConfigs(name + ".json", config, name + "-sample.json", sampleConfig);
     return config;
 }
 exports.loadAndCheckConfig = loadAndCheckConfig;
 function loadLabConfig() {
-    var fs = require('fs');
-    var configFolder = getConfigFolder();
-    var defaultConfig = require(configFolder + '/lab-default.json');
-    var configFilePath = configFolder + '/lab.json';
+    const fs = require('fs');
+    const configFolder = getConfigFolder();
+    const defaultConfig = require(configFolder + '/lab-default.json');
+    const configFilePath = configFolder + '/lab.json';
     if (fs.existsSync(configFilePath))
         return Object.assign(defaultConfig, require(configFilePath));
     else
@@ -103,7 +100,7 @@ function loadLabConfig() {
 }
 exports.loadLabConfig = loadLabConfig;
 function loadModelSchema() {
-    var rootPath = getRootPath();
+    const rootPath = getRootPath();
     return require(rootPath + '/src/model/schema.json');
 }
 exports.loadModelSchema = loadModelSchema;

@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var lawn = require("vineyard-lawn");
-var vineyard_users_1 = require("vineyard-users");
-var vineyard_lawn_1 = require("vineyard-lawn");
-var preprocessor_1 = require("./preprocessor");
-var GenericWebService = (function () {
-    function GenericWebService(village, versions) {
+const lawn = require("vineyard-lawn");
+const vineyard_users_1 = require("vineyard-users");
+const vineyard_lawn_1 = require("vineyard-lawn");
+const preprocessor_1 = require("./preprocessor");
+class GenericWebService {
+    constructor(village, versions) {
         this.village = village;
         this.userModel = village.getModel().User;
         this.versions = versions;
@@ -18,8 +18,8 @@ var GenericWebService = (function () {
             model: this.village.getModel()
         });
         // Backwards compatibility.  privateConfig.cookies is deprecated
-        var privateConfig = this.village.getPrivateConfig();
-        var cookies = privateConfig.api
+        const privateConfig = this.village.getPrivateConfig();
+        const cookies = privateConfig.api
             ? privateConfig.api.cookies
             : privateConfig.cookies;
         if (!cookies)
@@ -29,7 +29,7 @@ var GenericWebService = (function () {
         this.anonymous = this.preprocessor.createAnonymous();
         this.userService.loadValidationHelpers(this.server.getApiSchema());
     }
-    GenericWebService.prototype.initialize_endpoints = function () {
+    initialize_endpoints() {
         this.createPublicEndpoints([
             {
                 method: vineyard_lawn_1.Method.post,
@@ -44,47 +44,46 @@ var GenericWebService = (function () {
                 action: this.userService.logout
             },
         ]);
-    };
-    GenericWebService.prototype.compileApiSchema = function (schema) {
+    }
+    compileApiSchema(schema) {
         return this.server.compileApiSchema(schema);
-    };
-    GenericWebService.prototype.addApiSchemaHelper = function (schema) {
+    }
+    addApiSchemaHelper(schema) {
         this.server.addApiSchemaHelper(schema);
-    };
-    GenericWebService.prototype.createPublicEndpoints = function (endpoints) {
+    }
+    createPublicEndpoints(endpoints) {
         this.server.add_endpoints(endpoints, this.anonymous);
-    };
-    GenericWebService.prototype.createAuthorizedEndpoints = function (endpoints) {
+    }
+    createAuthorizedEndpoints(endpoints) {
         this.server.add_endpoints(endpoints, this.authorized);
-    };
-    GenericWebService.prototype.createEndpoints = function (endpoints, preprocessor) {
+    }
+    createEndpoints(endpoints, preprocessor) {
         this.server.add_endpoints(endpoints, preprocessor);
-    };
-    GenericWebService.prototype.getAuthorizedPreprocessor = function () {
+    }
+    getAuthorizedPreprocessor() {
         return this.authorized;
-    };
-    GenericWebService.prototype.getAnonymousPreprocessor = function () {
+    }
+    getAnonymousPreprocessor() {
         return this.anonymous;
-    };
-    GenericWebService.prototype.start = function () {
+    }
+    start() {
         return this.server.start(this.village.getPublicConfig().api);
-    };
-    GenericWebService.prototype.stop = function () {
+    }
+    stop() {
         return this.server.stop();
-    };
-    GenericWebService.prototype.getUserManager = function () {
+    }
+    getUserManager() {
         return this.userManager;
-    };
-    GenericWebService.prototype.getUserService = function () {
+    }
+    getUserService() {
         return this.userService;
-    };
-    GenericWebService.prototype.getLawnService = function () {
+    }
+    getLawnService() {
         return this.server;
-    };
-    GenericWebService.prototype.getVillage = function () {
+    }
+    getVillage() {
         return this.village;
-    };
-    return GenericWebService;
-}());
+    }
+}
 exports.GenericWebService = GenericWebService;
 //# sourceMappingURL=generic-web-service.js.map
