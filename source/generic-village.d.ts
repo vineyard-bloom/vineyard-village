@@ -12,7 +12,8 @@ export interface PrivateCookieConfig {
     secret: string;
 }
 export interface VillageDatabaseConfig extends GeneralDatabaseConfig {
-    devMode?: true;
+    devMode?: boolean;
+    logging?: true;
 }
 export interface PrivateApiConfig {
     cookies: CookieSettings;
