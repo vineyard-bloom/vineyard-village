@@ -21,7 +21,7 @@ export interface PrivateCookieConfig {
 
 export interface VillageDatabaseConfig extends GeneralDatabaseConfig {
   devMode?: boolean
-  logging?: true
+  logging?: boolean
 }
 
 export interface PrivateApiConfig {
